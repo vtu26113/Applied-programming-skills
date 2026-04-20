@@ -1,0 +1,20 @@
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        int[] freq = new int[26];
+        for (char t : tasks) freq[t - 'A']++;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for (int f : freq) if (f > 0) pq.offer(f);
+        int time = 0;
+        while (!pq.isEmpty()) {
+            List<Integer> temp = new ArrayList<>();
+            int cycle = n + 1;
+            while (cycle-- > 0 && !pq.isEmpty()) {
+                int val = pq.poll() - 1;
+                if (val > 0) temp.add(val);
+            }
+            for (int t : temp) pq.offer(t);
+            time += pq.isEmpty() ? temp.size() : n + 1;
+        }
+        return time;
+    }
+}
